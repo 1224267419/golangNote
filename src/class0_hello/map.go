@@ -19,7 +19,7 @@ func exam() {
 
 	fmt.Println(book["1元"]) //assignment to entry in nil map,map赋值前要先初始化
 
-	//用法
+	//用ok确认元素是否存在
 	price, ok := book["3元"]
 	if ok {
 		fmt.Println(price)
