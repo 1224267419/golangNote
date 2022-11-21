@@ -541,7 +541,21 @@ func (node *treeNode) setValue(value int) {
 3. 包名与文件夹名可以不相等
 4. 当你找不到包的时候,可以考虑一下修改GOPATH
 
+##### select
 
+select 随机执行一个可运行的 case。如果没有 case 可运行且没有default，它将阻塞，直到有 case 可运行。
+
+
+
+##### 断言assert [assert.go](src\class0_hello\assert.go) 
+
+告诉程序自己来自哪个结构体
+
+通过断言实现反射
+
+###### 反射: [reflect.go](src\class0_hello\reflect.go)  
+
+在编译时不知道类型的情况下，可更新变量、运行时查看值、调用方法以及直接对他们的布局进行操作的机制，称为反射。通俗一点就是：可以**知道本数据的原始数据类型和数据内容，方法等、并目且可以进行一定操作**(不再需要switch case来实现)
 
 
 
@@ -568,6 +582,59 @@ func (node *treeNode) setValue(value int) {
 ##### 用一个先进先出队列讲述别名 [main.go](src\class0_hello\queue\entry\main.go) 
 
 指针可以至今使用,无需重新指定 
+
+
+
+
+
+### 并发 
+
+基本都是使用**sync包**
+
+##### [goroutine.go](src\class0_hello\goroutine.go) 
+
+goroutine channel
+
+在调用一个方法的前面加上go就是goroutine,它会让方法异步执行相当于协程
+
+
+
+WaitGroup 一共有三个方法：
+
+```go
+(wg *WaitGroup) Add(delta int)
+(wg *WaitGroup) Done()
+(wg *WaitGroup) Wait()
+```
+
+- `Add` 方法用于设置 WaitGroup 的计数值，可以理解为子任务的数量
+- `Done` 方法用于将 WaitGroup 的计数值减一，可以理解为完成一个子任务
+- `Wait` 方法用于阻塞调用者，直到 WaitGroup 的计数值为0，即所有子任务都完成
+
+注意,必须add再wait,避免两者并发调用导致达不到预期
+
+
+
+##### channal:不同线程沟通工具
+
+ [channal.go](src\class0_hello\channal.go) 
+
+```go
+ch <- v    // 把 v 发送到通道 ch(写)
+v := <-ch  // 从 ch 接收数据(读)
+           // 并把值赋给 v
+```
+
+在没缓存的情况下
+如果管道有数据，写协程阻塞；如果没数据，读协程阻塞
+
+此处使用队列,先进先出fifo
+
+##### 锁
+
+注意.使用锁时都要使用指针,保证异步时锁相同
+
+###### 1.Mutex互斥锁
 
 
 
@@ -673,7 +740,13 @@ func main() {
 
 如上,使用了`urlretriever.Retriever`,但如果想使用测试包中的`test.Retriever`,那就得把所有的`urlretriever.Retriever`都改成`test.Retriever`,显然不好改
 
+##### 多态
+
+###### 通过接口interface实现 [interface.go](src\class0_hello\interface.go)  
+
 所以为了规避强类型的绑定,使用`interface`
+
+通过接口，我们可以统一 **类型与行为**，非侵入性的实现允许在完全不需要改动旧代码的情况下，让 struct **实现** interface。
 
 ```go
 type retriever interface {
@@ -683,35 +756,4 @@ type retriever interface {
 
 使用这样的一个方法,使得`retriever`可以代指所有 拥有`Get(string) string`方法的结构体
 
-
-
-
-
-#### duck typing(for go)
-
-- “像鸭子走路，像鸭子叫（长得像鸭子)，那么就是鸭子'
-- 描述事物的外部行为而非内部结构
-- 严格说go属于结构化类型系统，类似duck typing(GO是编译绑定)
-
-python缺点:**运行时**才知道有没有问题
-c++缺点:**编译时**才知道有没有**问题**
-Java缺点:强制实现接口,但**不能实现多个接口**
-
-
-
-接口:使用者定义(传统面向对象是实现者定义的)
-
-
-
- [main.go](src\program_thinking\retriever\main.go) 
-
-
-
-
-
-
-
-
-
-
-
+###### 
