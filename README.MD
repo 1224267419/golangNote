@@ -585,6 +585,58 @@ select 随机执行一个可运行的 case。如果没有 case 可运行且没�
 
 
 
+##### OS包 [os](src\class0_hello\osUsage.go) 
+
+通过OS包实现文件操作
+
+###### io.Seeker.Seek()
+
+`io.Seeker.Seek()`通过Seeker类的Seek方法实现光标移动
+
+```go
+type Seeker interface {
+	Seek(offset int64, whence int) (int64, error)
+}
+```
+
+Seek设置下一次读写份作的指针位置，每次的读写操作都是从指针位置开始的
+
+whence=0：表示从数据的开头开出移动指针whence=1：表示从数据的当前指针位且开始移指针
+whence=2：表示从数据的尾部开始移动指针SeekStart= 0//seek relative to the origin of the file
+SeekCurrent =1 /seek relative to the current offset
+SeekEnd 2= /seek relative to the end
+
+offset指计移动的偏移量
+
+其余读,写等操作见文件[os](src\class0_hello\osUsage.go) 
+
+
+
+
+
+
+
+###### type Closer interface{Close() error}
+
+`type Closer interface{Close() error}`一般用于关闭文件，关闭连接。关闭数据库等
+
+
+
+
+
+#### Net包与TCP [netTcp](src\class0_hello\netTcp)
+
+ 文件夹中分为服务端和客户端
+
+服务端使用监听功能监听管道,并执行操作
+客户端向管道写入信息并通过conn.Read(buf)接收服务端的信息
+
+
+
+如图,在net包的net.go文件中就有监听示例
+
+![image-20221122212636979](D:\working space\golang\README.assets\image-20221122212636979.png)
+
 
 
 ### 并发 
