@@ -29,6 +29,6 @@ func lengthOfLongestSubstring(s string) int {
 func main() {
 	//	fmt.Println(lengthOfLongestSubstring("abcabcbb"))
 	a := 10
-	a -= 1
+	a /= 2
 	fmt.Println(a)
 }

@@ -585,7 +585,7 @@ select 随机执行一个可运行的 case。如果没有 case 可运行且没�
 
 
 
-##### OS包 [os](src\class0_hello\osUsage.go) 
+##### OS包实现文件读写 [os](src\class0_hello\osUsage.go) 
 
 通过OS包实现文件操作
 
@@ -622,9 +622,9 @@ offset指计移动的偏移量
 
 
 
+#### 网络层三包
 
-
-#### Net包与TCP [netTcp](src\class0_hello\netTcp)
+##### Net包与TCP [netTcp](src\class0_hello\netTcp)
 
  文件夹中分为服务端和客户端
 
@@ -636,6 +636,41 @@ offset指计移动的偏移量
 如图,在net包的net.go文件中就有监听示例
 
 ![image-20221122212636979](D:\working space\golang\README.assets\image-20221122212636979.png)
+
+
+
+##### http包  [http](src\class0_hello\http_class) 
+
+前后端交互常见 
+
+重要的类型和接口:
+
+server:服务,包含地址端口处理器等
+conn:链接,用户请求来的
+response:返回信息
+request:用户的请求信息
+Handle:对于接收的信息进行处理并且返回的一个处理器
+
+
+
+
+
+##### RPC包 [main.go](src\class0_hello\rpc_class) 
+
+RPC（Remote Procedure Call）远程过程调用协议，一种通过网络从远程计算机上请求服务，而不需要了解底层网络技术的协议。
+
+G0的RPC只支持go写的系统
+
+GoRPC的函数有特殊要求：
+函数首字母必须大写
+必须只有两个参数：第一个参数是接收的参数，第二个参数是返回给客户端的#数，第二个参数必须是指针类型的
+函数还要有一个返回值eror
+
+
+
+
+
+
 
 
 
