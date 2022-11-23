@@ -655,7 +655,7 @@ Handle:对于接收的信息进行处理并且返回的一个处理器
 
 
 
-##### RPC包 [main.go](src\class0_hello\rpc_class) 
+##### RPC包 [rpc](src\class0_hello\rpc_class) 
 
 RPC（Remote Procedure Call）远程过程调用协议，一种通过网络从远程计算机上请求服务，而不需要了解底层网络技术的协议。
 
@@ -666,11 +666,11 @@ GoRPC的函数有特殊要求：
 必须只有两个参数：第一个参数是接收的参数，第二个参数是返回给客户端的#数，第二个参数必须是指针类型的
 函数还要有一个返回值eror
 
+服务端和客户端都需要有相同的类
 
+用`client, err := rpc.DialHTTP("tcp", "localhost:8888") `创建连接后
 
-
-
-
+`client.Call("Server.Add", req, &res)`直接用call函数即可调用,req是传出的参数,res是传入的参数
 
 
 
