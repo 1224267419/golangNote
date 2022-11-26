@@ -674,6 +674,43 @@ GoRPC的函数有特殊要求：
 
 
 
+##### 泛型: [main.go](src\class0_hello\fanxing\main.go) 
+
+台义：在定义函数（结构等）时候，可能会有多种类型传入，真正使用方法的时候才可以确定用的是什么类型，此时就可以用一个更加宽泛的类型（存在一定约束，只能在事些类型的范围内使用)暂时占位，这个类型就叫泛型
+
+
+
+
+
+~:为了从根本上解决这个问题，Go新增了一个符号 ~ ，在类型约束中使用类似 ~int 这种写法的话，就代表着不光是 int ，所有以 int 为底层类型的类型也都可用于实例化。
+
+案例中没给泛型结构体,可以自己试试
+
+
+
+#### 从http到websocket
+
+websocket的客户端不再只能一问一答,能建立长久联系
+
+
+
+
+
+```
+websocketUpgrader{
+HandshakeTimeout:0.//握手对间,0为不限制ReadBufferSize1024,//以字节为单位的IO缓冲区如果缓冲区大小为零，则使用HTTP服务器分配的缓冲区
+Write Buffers5ize:1024//以字节为单位的IO中区如果缓冲区大小为零，则使用HTTP服多器分的缓冲区
+WriteBufferPool:nil//WriteBufferPool是用于写操作的缓冲池。
+Subprotocols:nil,//按顺序指定服务器支持的协议
+Erro:nil//指定用于生成HTTP指误响应的函数。
+CheckOrigin:nil,//对过来的请求做校验用
+EnableCompressic0n:false,//指定报务器是吾应尝试根据进行协商消息压缩}
+```
+
+以上信息建议去看官方文档
+
+4:19
+
 ### 并发 
 
 基本都是使用**sync包**
