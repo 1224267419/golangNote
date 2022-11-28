@@ -884,4 +884,125 @@ type retriever interface {
 
 使用这样的一个方法,使得`retriever`可以代指所有 拥有`Get(string) string`方法的结构体
 
-###### 
+
+
+## 第三章gin:
+
+ [1_first_learning.go](C:\Users\Administrator\Desktop\golang\src\ginLearning\1_first_learning) 默认中间件,
+
+#### 2.gin发送get   post put delete请求
+
+默认来说是	查		增    	改		删
+
+###### restful:一种设计风格
+
+```
+RESTFUL特点包括：
+1、每一个URI代表1种资源；
+2、客户端使用GET、POST、PUT、DELETE4个表示操作方式的动词对服务端资源进行操作：GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源；
+3、通过操作资源的表现形式来操作资源；
+4、资源的表现形式是XML或者HTML；
+5、客户端与服务端之间的交互在请求之间是无状态的，从客户端到服务端的每个请求都必须包含理解请求所必需的信息。
+```
+
+- get: 参数挂在url,uri中传参
+- post: 参数在from body(json表单),uri中
+- delete: uri或body
+- put: body或uri
+
+###### url和uri
+
+URL是统一资源定位器，用于标识资源；URI（统一资源标识符）提供了更简单和可扩展的标识资源的方法。URL是URI的子集，
+
+URL（统一资源定位符）主要用于链接网页，网页组件或网页上的程序，借助访问方法（http，ftp，mailto等协议）来检索位置资源。
+
+URI（统一资源标识符）用于定义项目的标识，此处单词标识符表示无论使用的方法是什么（URL或URN），都要将一个资源与其他资源区分开来。
+
+##### get
+
+![image-20221127160349065](D:\working space\golang\README.assets\image-20221127160349065.png)
+
+get请求的key和value都在url中(require).但无法从body中获取json
+
+
+
+
+
+##### post
+
+![image-20221127160622714](D:\working space\golang\README.assets\image-20221127160622714.png)
+
+post**必须在如图的列表(json,form)中获取参数**:因为post默认不使用url传参
+
+##### put
+
+put同post
+put必须在如图的列表(json,form)中获取参数:因为put默认不使用url传参
+
+
+
+#### bind
+
+通过绑定的形式,将传过来的参数映射到结构体的示例上
+
+一般使用`should bind`模式
+
+ShouldBindJSON方法是最常用解析JSON数据的方法之一,但如果要多次绑定多个变量，需要使用ShouldBindBodyWith,因为ShouldBindJSON方法会抛出错误,影响正常流程
+
+![image-20221127170720504](D:\working space\golang\README.assets\image-20221127170720504.png)
+
+如图,发送json后再返回,具体可查看文档https://www.kancloud.cn/shuangdeyu/gin_book/949426讲述了解析json,xml,form三种格式(示例仅解析json)
+
+
+
+修改绑定函数和结构体后,将得到的参数绑定在uri
+
+![image-20221127172107980](D:\working space\golang\README.assets\image-20221127172107980.png)
+
+If `GET`, only `Form` binding engine (`query`) used.
+如果是Get，那么接收不到请求中的Post的数据？？
+如果是Post, 首先判断 `content-type` 的类型 `JSON` or `XML`, 然后使用对应的绑定器获取数据.(通过content-type,判断传过来的数据类型,从而使用合适的绑定器)
+
+
+
+
+
+###### **表单验证**
+
+在结构体元素中加入`binding:"required"` 让这个元素被验证(不然输入元素为空会直接使用**初值**),若元素为空会报错(`err!=nil`)
+
+###### 自定义验证
+
+有时候内置的验证规则可能不能满足业务需求，这样就需要自定义验证规则。大致两个步骤，1.定义一个验证方法。2.把这个方法注册为验证规则。
+
+```
+func mustBig(fl validator.FieldLevel) bool { //这里就是自定义的表单验证函数
+}
+
+
+if v, ok := binding.Validator.Engine().(*validator.Validate); ok {//使用绑定引擎
+v.RegisterValidation("mustBig", mustBig) //通过此处提供一个mustBig验证,记得这里放主函数里面
+}
+```
+
+
+
+
+
+#### 文件的接收与返回 [4_fileUpload](C:\Users\Administrator\Desktop\golang\src\ginLearning\4_fileUpload) 
+
+文档:https://www.kancloud.cn/shuangdeyu/gin_book/949420
+
+1.![image-20221127221740556](D:\working space\golang\README.assets\image-20221127221740556.png)
+
+必须在head告诉服务器type
+
+2. 
+
+![image-20221127224325935](D:\working space\golang\README.assets\image-20221127224325935.png)
+
+上传文件即可
+
+3. 通过`file, _ :=c.FormFile("file")`通过这个函数读取文件
+
+而传文件同时传信息也很简单,跟之前操作一致,就不再赘述了
